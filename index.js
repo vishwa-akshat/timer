@@ -1,19 +1,24 @@
-class Timer{
-    constructor(durationInput, startButton, pauseButton){
-        this.durationInput = durationInput;
-        this.startButton = startButton;
-        this.pauseButton = pauseButton;
-
-        this.startButton.addEventListener('click',this.start);
-    }
-
-    start(){
-        console.log("Time to start the timer");
-    }
-}
 
 const durationInput = document.querySelector("#durationInput");
 const startButton = document.querySelector("#start");
 const pauseButton = document.querySelector("#pause");
+const circle = document.querySelector("circle");
 
-const timer= new Timer(durationInput,startButton,pauseButton);
+const perimeter = circle.getAttribute("r")* Math.PI * 2;
+circle.setAttribute("stroke-dasharray",perimeter);
+
+let duration;
+const timer= new Timer(durationInput,startButton,pauseButton,{
+    onStart(totalDuration){
+        duration = totalDuration;
+    },
+    onTick(timeRemaining){
+
+        circle.setAttribute("stroke-dashoffset",
+        (perimeter*timeRemaining)/ duration -perimeter
+        );
+    }, 
+    onComplete(){
+        console.log("Timer is completed");
+    }
+});
